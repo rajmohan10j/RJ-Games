@@ -1,0 +1,7 @@
+node_modules/
+Project/
+.superpowers/
+dist/
+*.log
+.env
+opencode.json
