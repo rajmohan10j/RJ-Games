@@ -4,3 +4,4 @@ Project/
 dist/
 *.log
 .env
+opencode.json
