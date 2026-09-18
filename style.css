@@ -1,0 +1,489 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  overflow: hidden;
+  touch-action: none;
+  background-color: #0a0f1d;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #f8fafc;
+  width: 100vw;
+  height: 100vh;
+}
+
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+#ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Floating Anime Combat Popup */
+.combat-popup {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  font-family: 'Bungee', cursive, sans-serif;
+  font-size: 1.8rem;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px currentColor;
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 30;
+  white-space: nowrap;
+}
+
+/* Glassmorphic Modal Cards */
+.modal-card {
+  position: absolute;
+  background: rgba(10, 15, 29, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.2);
+  padding: 1.8rem 2.2rem;
+  border-radius: 24px;
+  text-align: center;
+  pointer-events: auto;
+  max-width: 450px;
+  width: 92%;
+  max-height: 94vh;
+  overflow-y: auto;
+  animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Banner Image Header */
+.banner-wrapper {
+  position: relative;
+  width: calc(100% + 4.4rem);
+  margin: -1.8rem -2.2rem 1.2rem -2.2rem;
+  height: 125px;
+  overflow: hidden;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+}
+
+.promo-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.banner-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(to top, rgba(10, 15, 29, 1), transparent);
+}
+
+.logo-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: #38bdf8;
+  background: rgba(10, 15, 29, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  padding: 0.3rem 0.8rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+/* Hero vs Villain Matchup Avatars */
+.vs-matchup-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.character-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.char-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.hero-card .char-avatar {
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+}
+
+.villain-card .char-avatar {
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+.char-name {
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.hero-text {
+  color: #38bdf8;
+}
+
+.villain-text {
+  color: #ef4444;
+}
+
+.vs-badge {
+  font-family: 'Bungee', cursive, sans-serif;
+  font-size: 1.3rem;
+  color: #facc15;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.7);
+  background: rgba(30, 41, 59, 0.8);
+  padding: 0.2rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(250, 204, 21, 0.4);
+}
+
+.game-title {
+  font-family: 'Bungee', cursive, sans-serif;
+  font-size: 2.1rem;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.2rem;
+}
+
+.game-subtitle {
+  font-size: 0.86rem;
+  color: #94a3b8;
+  margin-bottom: 1.2rem;
+  line-height: 1.35;
+}
+
+/* Instructions */
+.instructions-box {
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.84rem;
+}
+
+.key-badge {
+  display: inline-block;
+  background: #334155;
+  color: #f8fafc;
+  font-weight: 800;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  border-bottom: 2px solid #1e293b;
+}
+
+.control-desc {
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+/* Action Button */
+.action-btn {
+  width: 100%;
+  padding: 0.95rem 1.4rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #0a0f1d;
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(2, 132, 199, 0.6);
+  background: linear-gradient(135deg, #7dd3fc 0%, #0369a1 100%);
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+}
+
+/* In-Game HUD Profile */
+#hud {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  z-index: 20;
+}
+
+.hud-stat-box {
+  background: rgba(10, 15, 29, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(56, 189, 248, 0.35);
+  padding: 0.6rem 1rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.hud-hero-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.hud-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  object-fit: cover;
+}
+
+.hud-score-block {
+  text-align: right;
+}
+
+.hud-score {
+  font-family: 'Bungee', cursive, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #38bdf8;
+  line-height: 1;
+}
+
+.hud-sub-row {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.hud-kills {
+  color: #ef4444;
+}
+
+.hud-best {
+  color: #94a3b8;
+}
+
+/* Mobile On-Screen Action Bar */
+.mobile-action-bar {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  width: 100%;
+  padding: 0 1.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.mobile-btn {
+  pointer-events: auto;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  touch-action: manipulation;
+  transition: transform 0.1s;
+}
+
+.mobile-btn:active {
+  transform: scale(0.9);
+}
+
+.jump-btn {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.9) 0%, rgba(3, 105, 161, 0.9) 100%);
+  color: white;
+  border-color: #38bdf8;
+}
+
+.fire-btn {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(185, 28, 28, 0.9) 100%);
+  color: white;
+  border-color: #f87171;
+}
+
+.btn-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.btn-text {
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  margin-top: 0.1rem;
+}
+
+/* Game Over Villain Taunt */
+.villain-defeat-avatar-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.8rem;
+}
+
+.villain-taunt-img {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: 3px solid #ef4444;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.7);
+  object-fit: cover;
+}
+
+.game-over-tag {
+  color: #ef4444;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  margin-top: 0.4rem;
+}
+
+.game-over-title {
+  font-family: 'Bungee', cursive, sans-serif;
+  font-size: 2.1rem;
+  color: #ffffff;
+  margin-bottom: 0.2rem;
+}
+
+.taunt-quote {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #f87171;
+  margin-bottom: 1.2rem;
+}
+
+.score-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1.4rem;
+}
+
+.score-box {
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.score-box.full-width {
+  grid-column: 1 / -1;
+}
+
+.score-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.score-value {
+  font-family: 'Bungee', cursive, sans-serif;
+  font-size: 1.6rem;
+  color: #f8fafc;
+}
+
+.score-value.highlight {
+  color: #38bdf8;
+}
+
+.score-value.kills-val {
+  color: #ef4444;
+}
+
+.score-value.best-val {
+  color: #facc15;
+}
+
+@media (max-width: 600px) {
+  .game-title {
+    font-size: 1.8rem;
+  }
+  .modal-card {
+    padding: 1.4rem 1.2rem;
+  }
+  .banner-wrapper {
+    width: calc(100% + 2.4rem);
+    margin: -1.4rem -1.2rem 1rem -1.2rem;
+    height: 100px;
+  }
+}
+
+@media (min-width: 800px) {
+  .mobile-only {
+    display: none;
+  }
+}
